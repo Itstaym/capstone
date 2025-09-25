@@ -115,11 +115,11 @@
     
     if (!sessionStorage.getItem('isLoggedIn')) {
       alert('Nag-logout ka noh? Login ka ulit!');
-      window.location.href = '../login/login.html'; 
+      window.location.href = '../../main_login/main_login.html'; 
     }
     function logout() {
     sessionStorage.removeItem('isLoggedIn'); 
-    window.location.href = '../login/login.html'; 
+    window.location.href = '../../main_login/main_login.html'; 
   }
     function showTime() {
 	document.getElementById('currentTime').innerHTML = new Date().toLocaleString();
