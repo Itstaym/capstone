@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Library Management System - Book Inquiry</title>
+  <link rel="stylesheet" href="book inquiry.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+  <header>
+    <div class="title-logo">
+      <img src="https://www.paterostechnologicalcollege.edu.ph/ASSETS/IMAGES/LOGO/logo-ptc.png" alt="PTC Logo" class="logo">
+      <h1>PTC Booklink: Library Management System</h1>
+    </div>
+    <nav>
+      <a href="user_main.html">Dashboard</a>
+      <a href="book inquiry.html">Book Inquiry</a>
+      <a href="history.html">Borrow/Return History</a>
+    </nav>
+    <div>
+      <button id="logoutBtn" onclick="logout()">
+        <i class="fas fa-sign-out-alt"></i>
+      </button>
+    </div>
+  </header>
+
+  <div class="search-container">
+    <input type="text" id="searchInput" placeholder="Search by Title, Author, Publisher" onkeyup="searchBooks()">
+    <i class="fas fa-search search-icon"></i>
+  </div>
+
+  <div class="book-list">
+    <h2>Available Books</h2>
+    <table id="booksTable">
+      <thead>
+        <tr>
+          <th>Book Title</th>
+          <th>Author</th>
+          <th>Publisher</th>
+          <th>Year</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Example book entries -->
+        <tr>
+          <td>Introduction to Algorithms</td>
+          <td>Thomas H. Cormen</td>
+          <td>PTC</td>
+          <td>2020</td>
+          <td>Available</td>
+          <td><button class="borrow-btn">Borrow</button></td>
+        </tr>
+        <tr>
+          <td>Database Systems Concepts</td>
+          <td>Abraham Silberschatz</td>
+          <td>PTC</td>
+          <td>2024</td>
+          <td>Available</td>
+          <td><button class="borrow-btn">Borrow</button></td>
+        </tr>
+        <!-- More rows can be dynamically added -->
+      </tbody>
+    </table>
+  </div>
+
+  <div class="notification-area" id="notificationArea" style="display: none;">
+  <p id="notificationMessage"></p>
+</div>
+
+  <footer>
+    <p id="currentTime"></p>
+  </footer>
+
+  <script>
+    function searchBooks() {
+      const input = document.getElementById("searchInput").value.toLowerCase();
+      const table = document.getElementById("booksTable");
+      const rows = table.getElementsByTagName("tr");
+
+      for (let i = 1; i < rows.length; i++) {
+        const cells = rows[i].getElementsByTagName("td");
+        let match = false;
+
+        for (let j = 0; j < cells.length; j++) {
+          if (cells[j]) {
+            const cellText = cells[j].textContent || cells[j].innerText;
+            if (cellText.toLowerCase().indexOf(input) > -1) {
+              match = true;
+              break;
+            }
+          }
+        }
+
+        rows[i].style.display = match ? "" : "none";
+      }
+    }
+    document.addEventListener("DOMContentLoaded", function () {
+  const borrowButtons = document.querySelectorAll(".borrow-btn");
+
+  borrowButtons.forEach((button) => {
+    button.addEventListener("click", function () {
+      const row = button.closest("tr");
+      const bookTitle = row.cells[0].textContent;
+
+      // Display notification
+      const notificationArea = document.getElementById("notificationArea");
+      const notificationMessage = document.getElementById("notificationMessage");
+
+      notificationMessage.textContent = `Your request for "${bookTitle}" has been successfully sent to the librarian!`;
+      notificationArea.style.display = "block";
+
+      // Hide notification after 10 seconds
+      setTimeout(() => {
+        notificationArea.style.display = "none";
+      }, 10000);
+    });
+  });
+});
+
+    function showTime() {
+      document.getElementById('currentTime').innerHTML = new Date().toLocaleString();
+    }
+    showTime();
+    setInterval(function () {
+      showTime();
+    }, 1000);
+
+    
+    if (!sessionStorage.getItem('isLoggedIn')) {
+      alert('Nag-logout ka noh? Login ka ulit!');
+      window.location.href = '../user login/user login.html'; 
+    }
+    function logout() {
+    sessionStorage.removeItem('isLoggedIn'); 
+    window.location.href = '../user login/user login.html'; 
+    }
+  </script>
+</body>
+</html>

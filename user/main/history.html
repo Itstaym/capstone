@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Borrowed/Returned Books History</title>
+    <link rel="stylesheet" href="history.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header>
+    <div class="title-logo">
+      <img src="https://www.paterostechnologicalcollege.edu.ph/ASSETS/IMAGES/LOGO/logo-ptc.png" alt="PTC Logo" class="logo">
+      <h1>PTC Booklink: Library Management System</h1>
+    </div>
+    <nav>
+      <a href="user_main.html">Dashboard</a>
+      <a href="book inquiry.html">Book Inquiry</a>
+      <a href="history.html">Borrow/Return History</a>
+    </nav>
+    <div>
+      <button id="logoutBtn" onclick="logout()">
+        <i class="fas fa-sign-out-alt"></i>
+      </button>
+    </div>
+  </header>
+
+    <h2 style="text-align:center; margin-top:20px;">Borrow/Return History</h2>
+
+    <!-- Notification Area -->
+    <div class="notification-area" id="notificationArea" style="display: none;">
+        <p id="notificationMessage"></p>
+    </div>
+
+    <!-- History Table -->
+    <div class="history-table-container">
+        <table class="history-table">
+            <thead>
+                <tr>
+                    <th>Book Title</th>
+                    <th>Author</th>
+                    <th>Status</th>
+                    <th>Date & Time</th>
+                </tr>
+            </thead>
+            <tbody id="historyTable">
+                <!-- Example book entries -->
+                <tr>
+                    <td>Noli Me Tangere</td>
+                    <td>Jose Rizal</td>
+                    <td>Borrowed</td>
+                    <td>2023-10-01 2:30PM</td>
+                </tr>
+                <tr>
+                    <td>El Filibusterismo</td>
+                    <td>Jose Rizal</td>
+                    <td>Returned</td>
+                    <td>2023-10-05 10:15AM</td>
+                </tr>
+                <tr>
+                    <td>Florante at Laura</td>
+                    <td>Francisco Balagtas</td>
+                    <td>Borrowed</td>
+                    <td>2023-10-10 4:45PM</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <footer>
+        <p id="currentTime"></p>
+    </footer>
+
+    <script>
+        // Function to add a new history entry
+        function addHistoryEntry(bookTitle, author, status, dateTime) {
+            const table = document.getElementById('historyTable');
+            const newRow = document.createElement('tr');
+
+            newRow.innerHTML = `
+                <td>${bookTitle}</td>
+                <td>${author}</td>
+                <td>${status}</td>
+                <td>${dateTime}</td>
+            `;
+
+            table.appendChild(newRow);
+
+            // Display notification
+            const notificationArea = document.getElementById('notificationArea');
+            const notificationMessage = document.getElementById('notificationMessage');
+
+            notificationMessage.textContent = `Successfully ${status.toLowerCase()} "${bookTitle}" on ${dateTime}.`;
+            notificationArea.style.display = "block";
+
+            // Hide notification after 5 seconds
+            setTimeout(() => {
+                notificationArea.style.display = "none";
+            }, 5000);
+        }
+
+        // Example: Simulate real-time updates
+        setTimeout(() => addHistoryEntry('Ibong Adarna', 'Anonymous', 'Borrowed', '2023-10-15 09:30AM'), 3000);
+        setTimeout(() => addHistoryEntry('Mga Kwento ni Lola Basyang', 'Severino Reyes', 'Returned', '2023-10-16 11:45AM'), 6000);
+
+        // Display current time in footer
+        function showTime() {
+            document.getElementById('currentTime').innerHTML = new Date().toLocaleString();
+        }
+        showTime();
+        setInterval(showTime, 1000);
+
+        /*
+        if (!sessionStorage.getItem('isLoggedIn')) {
+            alert('Nag-logout ka noh? Login ka ulit!');
+            window.location.href = '../user login/user login.html'; 
+            }
+        function logout() {
+            sessionStorage.removeItem('isLoggedIn'); 
+            window.location.href = '../user login/user login.html'; 
+            }*/
+    </script>
+</body>
+</html>

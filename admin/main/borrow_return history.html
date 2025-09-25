@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Borrow/Return History</title>
+    <link rel="stylesheet" href="borrow_return_history.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</head>
+<body>
+    <header>
+        <div class="title-logo">
+            <img src="https://www.paterostechnologicalcollege.edu.ph/ASSETS/IMAGES/LOGO/logo-ptc.png" alt="PTC Logo" class="logo">
+            <h1>Admin</h1>
+        </div>
+        <nav>
+            <a href="admin main.html">Create User Account</a>
+            <a href="borrow_return history.html">Borrow/Return History</a>
+        </nav>
+        <div>
+            <button id="logoutBtn" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i>
+            </button>
+        </div>
+    </header>
+
+    <h2 style="text-align:center; margin-top:20px;">User Borrow/Return History</h2>
+
+    <!-- Month and Year Display -->
+    <div id="monthYearDisplay" style="text-align:center; font-size:1.2em; font-weight:bold; margin-bottom:10px;"></div>
+
+    <!-- Report Generation Buttons -->
+    <div class="report-buttons" style="text-align:center; margin:20px;">
+        <button onclick="generateExcel()">Generate Excel Report</button>
+        <button onclick="generatePDF()">Generate PDF Report</button>
+    </div>
+
+    <!-- History Table -->
+    <div class="history-table-container">
+        <!-- Month and Year Display above each table -->
+        <div class="table-month-year" style="text-align:center; font-size:1.1em; font-weight:bold; margin-bottom:5px;" id="tableMonthYear"></div>
+        <table class="history-table" id="historyTable">
+            <thead>
+                <tr>
+                    <th>User Name</th>
+                    <th>Email</th>
+                    <th>Book Title</th>
+                    <th>Author</th>
+                    <th>Status</th>
+                    <th>Date & Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Example entries -->
+                <tr>
+                    <td>Juan Dela Cruz</td>
+                    <td>example@paterostechnologicalcollege.edu.ph</td>
+                    <td>Noli Me Tangere</td>
+                    <td>Jose Rizal</td>
+                    <td>Borrowed</td>
+                    <td>2025-07-01 2:30PM</td>
+                </tr>
+                <tr>
+                    <td>Maria Clara</td>
+                    <td>example@paterostechnologicalcollege.edu.ph</td>
+                    <td>El Filibusterismo</td>
+                    <td>Jose Rizal</td>
+                    <td>Returned</td>
+                    <td>2025-07-05 10:15AM</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <footer>
+        <p id="currentTime"></p>
+    </footer>
+
+    <script>
+        // Function to generate Excel report
+        function generateExcel() {
+            const table = document.getElementById("historyTable");
+            const workbook = XLSX.utils.table_to_book(table, { sheet: "Borrow/Return History" });
+            XLSX.writeFile(workbook, "Borrow_Return_History.xlsx");
+        }
+
+        // Function to generate PDF report
+        function generatePDF() {
+            const table = document.getElementById("historyTable");
+            const rows = Array.from(table.rows).map(row => Array.from(row.cells).map(cell => cell.textContent));
+            const doc = new jsPDF();
+
+            doc.text("Borrow/Return History", 10, 10);
+            doc.autoTable({
+                head: [rows[0]],
+                body: rows.slice(1),
+            });
+
+            doc.save("Borrow_Return_History.pdf");
+        }
+
+        // Display current time in footer
+        function showTime() {
+            document.getElementById('currentTime').innerHTML = new Date().toLocaleString();
+        }
+        showTime();
+        setInterval(showTime, 1000);
+
+        function logout() {
+            sessionStorage.removeItem('isLoggedIn');
+            window.location.href = '../login/admin login.html';
+        }
+
+        // Display Month and Year above table and page
+        function displayMonthYear() {
+            const now = new Date();
+            const options = { month: 'long', year: 'numeric' };
+            const monthYear = now.toLocaleDateString('en-US', options);
+            document.getElementById('monthYearDisplay').textContent = monthYear;
+            document.getElementById('tableMonthYear').textContent = monthYear;
+        }
+        displayMonthYear();
+    </script>
+</body>
+</html>

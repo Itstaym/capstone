@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin - Create User Account</title>
+    <link rel="stylesheet" href="admin main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="title-logo">
+            <img src="https://www.paterostechnologicalcollege.edu.ph/ASSETS/IMAGES/LOGO/logo-ptc.png" alt="PTC Logo" class="logo">
+            <h1>Admin</h1>
+        </div>
+        <nav>
+            <a href="admin main.html">Create User Account</a>
+            <a href="borrow_return history.html">Borrow/Return History</a>
+        </nav>
+        <div>
+            <button id="logoutBtn" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i>
+            </button>
+        </div>
+    </header>
+        <div class="create-user-section">
+            <h2>Create User Account</h2>
+            <form id="createUserForm" onsubmit="return createUser(event)">
+                <div class="form-group">
+                    <label for="fullname">Full Name:</label>
+                    <input type="text" id="fullname" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="role">Role:</label>
+                    <select id="role" required>
+                        <option value="">Select Role</option>
+                        <option value="user">User</option>
+                        <option value="librarian">Librarian</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" required>
+                </div>
+                <button type="submit" class="create-btn">Create Account</button>
+            </form>
+            <div id="userCreateMsg" style="margin-top:15px;"></div>
+        </div>
+
+    <footer>
+        <p id="currentTime"></p>
+    </footer>
+
+    <script>
+        function createUser(event) {
+            event.preventDefault();
+            // Collect form data
+            const username = document.getElementById('username').value.trim();
+            const fullname = document.getElementById('fullname').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const role = document.getElementById('role').value;
+            const password = document.getElementById('password').value;
+
+            // Here you would send the data to your backend/server for actual account creation
+            // For demo, just show a message
+            document.getElementById('userCreateMsg').innerHTML =
+                `<span style="color:green;"><i class="fas fa-check-circle"></i> User account for <b>${fullname}</b> created successfully!</span>`;
+
+            document.getElementById('createUserForm').reset();
+            return false;
+        }
+
+        function logout() {
+            sessionStorage.removeItem('isLoggedIn');
+            window.location.href = '../login/admin login.html';
+        }
+
+        function showTime() {
+            document.getElementById('currentTime').innerHTML = new Date().toLocaleString();
+        }
+        showTime();
+        setInterval(showTime, 1000);
+    </script>
+
+</body>
+</html>

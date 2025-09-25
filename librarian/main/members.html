@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Library Management System - Users</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="members.css">
+</head>
+<body>
+  <header>
+    <div class="title-logo">
+      <img src="https://www.paterostechnologicalcollege.edu.ph/ASSETS/IMAGES/LOGO/logo-ptc.png" alt="PTC Logo" class="logo">
+      <h1>PTC Booklink: Library Management System</h1>
+    </div>
+    <nav>
+      <a href="main.html">Dashboard</a>
+      <a href="books.html">Books</a>
+      <a href="members.html">Users</a>
+      <a href="issue and return.html">Borrow and Returns</a>
+      <a href="borrow_return history.html">Borrow/Return History</a>
+    </nav>
+    <div>
+      <button id="logoutBtn" onclick="logout()">
+        <i class="fas fa-sign-out-alt"></i>
+      </button>
+    </div>
+  </header>
+
+  <div class="container">
+    <h2>Users</h2>
+
+    
+    <div class="tabs">
+      <button class="tab-link active" onclick="openTab(event, 'students')">Students</button>
+      <button class="tab-link" onclick="openTab(event, 'teachers')">Teachers</button>
+    </div>
+
+    
+    <div id="students" class="tab-content active">
+      <h3>Students</h3>
+      <table>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Borrowed Books</th>
+          <th>Action</th>
+        </tr>
+        <tr>
+          <td>1</td>
+          <td>Alice</td>
+          <td>example@paterostechnologicalcollege.edu.ph</td>
+          <td>1984, Brave New World</td>
+          <td><button class="remind" onclick="sendReminder('Alice')">Remind</button></td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>Bob</td>
+          <td>example@paterostechnologicalcollege.edu.ph</td>
+          <td>The Great Gatsby</td>
+          <td><button class="remind" onclick="sendReminder('Bob')">Remind</button></td>
+        </tr>
+      </table>
+    </div>
+
+    
+    <div id="teachers" class="tab-content">
+      <h3>Teachers</h3>
+      <table>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Borrowed Books</th>
+          <th>Action</th>
+        </tr>
+        <tr>
+          <td>1</td>
+          <td>Mr. Smith</td>
+          <td>A Brief History of Time</td>
+          <td><button class="remind" onclick="sendReminder('Mr. Smith')">Remind</button></td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>Mrs. Johnson</td>
+          <td>The Catcher in the Rye</td>
+          <td><button class="remind" onclick="sendReminder('Mrs. Johnson')">Remind</button></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+<footer>
+  <p id="currentTime"></p>
+  </footer>
+
+  <script>
+    
+    function openTab(evt, tabName) {
+      var i, tabcontent, tablinks;
+      tabcontent = document.getElementsByClassName("tab-content");
+      for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].classList.remove("active");
+      }
+      tablinks = document.getElementsByClassName("tab-link");
+      for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].classList.remove("active");
+      }
+      document.getElementById(tabName).classList.add("active");
+      evt.currentTarget.classList.add("active");
+    }
+
+    
+    function sendReminder(memberName) {
+      alert("Reminder sent to " + memberName + " to return borrowed books.");
+    }
+    
+    if (!sessionStorage.getItem('isLoggedIn')) {
+      alert('Nag-logout ka noh? Login ka ulit!');
+      window.location.href = '../login/login.html'; 
+    }
+    function logout() {
+    sessionStorage.removeItem('isLoggedIn'); 
+    window.location.href = '../login/login.html'; 
+  }
+    function showTime() {
+	document.getElementById('currentTime').innerHTML = new Date().toLocaleString();
+}
+showTime();
+setInterval(function () {
+	showTime();
+}, 1000);
+  </script>
+</body>
+</html>

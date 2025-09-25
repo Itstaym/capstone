@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Library Management System - Borrow & Return Books</title>
+  <link rel="stylesheet" href="issue and return.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <script src="https://unpkg.com/html5-qrcode/minified/html5-qrcode.min.js"></script>
+</head>
+<body>
+  <header>
+    <div class="title-logo">
+      <img src="https://www.paterostechnologicalcollege.edu.ph/ASSETS/IMAGES/LOGO/logo-ptc.png" alt="PTC Logo" class="logo">
+      <h1>PTC Booklink: Library Management System</h1>
+    </div>
+    <nav>
+      <a href="main.html">Dashboard</a>
+      <a href="books.html">Books</a>
+      <a href="members.html">Users</a>
+      <a href="issue and return.html">Borrow and Returns</a>
+      <a href="borrow_return history.html">Borrow/Return History</a>
+    </nav>
+    <div>
+      <button id="logoutBtn" onclick="logout()">
+        <i class="fas fa-sign-out-alt"></i>
+      </button>
+    </div>
+  </header>
+  <div class="container">
+    
+<div class="section">
+  <h2>Borrow Book</h2>
+  <form onsubmit="return issueBook(event);">
+    <button type="button" id="scanIssueMemberBtn" onclick="openQrScanner('issueMember')">Scan Member QR</button>
+    <input type="hidden" id="issueMember" required>
+    <button type="button" id="scanIssueBookBtn" onclick="openQrScanner('issueBookTitle')">Scan Book QR</button>
+    <input type="hidden" id="issueBookTitle" required>
+    <p>Borrow Date</p>
+    <input type="date" id="issueDate" placeholder="Issue Date" required>
+    <p>Due Date</p>
+    <input type="date" id="dueDate" placeholder="Due Date" required>
+    <button type="submit">Borrow</button>
+  </form>
+</div>
+
+
+<div class="section">
+  <h2>Return Book</h2>
+  <form onsubmit="return returnBook(event);">
+    <button type="button" id="scanReturnMemberBtn" onclick="openQrScanner('returnMember')">Scan Member QR</button>
+    <input type="hidden" id="returnMember" required>
+    <button type="button" id="scanReturnBookBtn" onclick="openQrScanner('returnBookTitle')">Scan Book QR</button>
+    <input type="hidden" id="returnBookTitle" required>
+    <p>Return Date</p>
+    <input type="date" id="returnDate" placeholder="Return Date" required>
+    <button type="submit">Return Book</button>
+  </form>
+</div>
+
+<div id="qrScannerModal" style="display: none;">
+  <div id="reader" style="width: 300px; height: 300px; margin: auto;"></div>
+  <button onclick="closeQrScanner()">Close</button>
+</div>
+  </div>
+  <footer>
+    <p id="currentTime"></p>
+  </footer>
+  <script>
+
+function openQrScanner(inputId) {
+  currentInputId = inputId;
+  document.getElementById("qrScannerModal").style.display = "block";
+
+  const html5QrCode = new Html5Qrcode("reader");
+  html5QrCode.start(
+    { facingMode: "environment" }, 
+    {
+      fps: 10, 
+      qrbox: { width: 250, height: 250 }, 
+    },
+    (decodedText) => {
+      
+      document.getElementById(currentInputId).value = decodedText;
+      alert(`Scanned: ${decodedText}`);
+      html5QrCode.stop(); 
+      closeQrScanner();
+    },
+    (errorMessage) => {
+      
+      console.error(`QR Code scan error: ${errorMessage}`);
+    }
+  ).catch((err) => {
+    console.error(`Unable to start scanning: ${err}`);
+  });
+}
+
+function closeQrScanner() {
+  document.getElementById("qrScannerModal").style.display = "none";
+  const reader = document.getElementById("reader");
+  if (reader) {
+    reader.innerHTML = ""; 
+  }
+}
+
+    if (!sessionStorage.getItem('isLoggedIn')) {
+      alert('Nag-logout ka noh? Login ka ulit!');
+      window.location.href = '../login/login.html'; 
+    }
+    function logout() {
+    sessionStorage.removeItem('isLoggedIn'); 
+    window.location.href = '../login/login.html'; 
+  }
+
+    
+    function showTime() {
+      document.getElementById('currentTime').innerHTML = new Date().toLocaleString();
+    }
+    showTime();
+    setInterval(showTime, 1000);
+  </script>
+</body>
+</html>
