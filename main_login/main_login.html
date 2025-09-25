@@ -13,7 +13,6 @@
     </div>
     <div class="login-container">
       <h2>Login</h2>
-      <!-- FIX 1: Pass the 'event' object to the login function -->
       <form onsubmit="login(event)">
         <input type="text" id="username" placeholder="Username" required>
         <div class="password-wrapper">
@@ -40,9 +39,7 @@
       }
     }
 
-    // FIX 1: Accept the 'event' object as a parameter
     function login(event) {
-      // And prevent the default page reload behavior
       event.preventDefault();
 
       const name = document.getElementById('username').value;
@@ -50,7 +47,6 @@
   
       let role = null;
 
-      // Note: I've updated these to match your folder names for consistency
       if (name === "admin" && pw === "password1") {
         role = 'admin'; 
       }
@@ -58,18 +54,20 @@
         role = 'librarian';
       }
       else if (name === "student" && pw === "password3") {
-        role = 'user'; // Changed to 'user' to match the folder path
+        role = 'user'; 
       }
 
       switch (role) { 
         case 'admin':
-          // FIX 2: Corrected path to go up only one level
+          sessionStorage.setItem('isLoggedIn', 'true');
           window.location.href = "../admin/main/admin_main.html";
           break;
         case 'librarian':
+          sessionStorage.setItem('isLoggedIn', 'true');
           window.location.href = "../librarian/main/main.html";
           break;
-        case 'user': // This case must match the role set above
+        case 'user': 
+          sessionStorage.setItem('isLoggedIn', 'true');
           window.location.href = "../user/main/user_main.html";
           break;
         default:
