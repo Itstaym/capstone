@@ -41,6 +41,7 @@
                     <th>Author</th>
                     <th>Status</th>
                     <th>Date & Time</th>
+                    <th>Time Elapsed</th>
                 </tr>
             </thead>
             <tbody id="historyTable">
@@ -50,18 +51,21 @@
                     <td>Jose Rizal</td>
                     <td>Borrowed</td>
                     <td>2023-10-01 2:30PM</td>
+                    <td></td>
                 </tr>
                 <tr>
                     <td>El Filibusterismo</td>
                     <td>Jose Rizal</td>
                     <td>Returned</td>
                     <td>2023-10-05 10:15AM</td>
+                    <td></td>
                 </tr>
                 <tr>
                     <td>Florante at Laura</td>
                     <td>Francisco Balagtas</td>
                     <td>Borrowed</td>
                     <td>2023-10-10 4:45PM</td>
+                    <td></td>
                 </tr>
             </tbody>
         </table>
@@ -110,7 +114,6 @@
         showTime();
         setInterval(showTime, 1000);
 
-        /*
         if (!sessionStorage.getItem('isLoggedIn')) {
             alert('Nag-logout ka noh? Login ka ulit!');
             window.location.href = '../../main_login/main_login.html'; 
@@ -118,7 +121,7 @@
         function logout() {
             sessionStorage.removeItem('isLoggedIn'); 
             window.location.href = '../../main_login/main_login.html'; 
-            }*/
+            }
     </script>
 </body>
 </html>
