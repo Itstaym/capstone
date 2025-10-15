@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin - User Management</title>
+    <link rel="stylesheet" href="user_management.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="title-logo">
+            <img src="https://www.paterostechnologicalcollege.edu.ph/ASSETS/IMAGES/LOGO/logo-ptc.png" alt="PTC Logo" class="logo">
+            <h1>Admin</h1>
+        </div>
+        <nav>
+            <a href="admin_main.html">Create User Account</a>
+            <a href="user_management.html">Manage Users</a>
+            <a href="borrow_return history.html">Borrow/Return History</a>
+        </nav>
+        <div>
+            <button id="logoutBtn" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i>
+            </button>
+        </div>
+    </header>
+        <div class="users-container">
+    <!-- Search Bar -->
+    <div class="search-container">
+        <i class="fas fa-search"></i>
+        <input type="text" id="searchUsers" placeholder="Search users...">
+    </div>
+
+    <!-- Students Table -->
+    <div class="table-section">
+        <h2><i class="fas fa-user-graduate"></i> Students</h2>
+        <table id="studentsTable" class="users-table">
+            <thead>
+                <tr>
+                    <th>Full Name</th>
+                    <th>Email</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Juan Dela Cruz</td>
+                    <td>juan.delacruz@paterostechnologicalcollege.edu.ph</td>
+                    <td class="action-buttons">
+                        <button class="edit-btn" onclick="editUser(this, 'student')">
+                            <i class="fas fa-edit"></i> Edit
+                        </button>
+                        <button class="delete-btn" onclick="deleteUser(this, 'student')">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Teachers Table -->
+    <div class="table-section">
+        <h2><i class="fas fa-chalkboard-teacher"></i> Teachers</h2>
+        <table id="teachersTable" class="users-table">
+            <thead>
+                <tr>
+                    <th>Full Name</th>
+                    <th>Email</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Maria Santos</td>
+                    <td>maria.santos@paterostechnologicalcollege.edu.ph</td>
+                    <td class="action-buttons">
+                        <button class="edit-btn" onclick="editUser(this, 'teacher')">
+                            <i class="fas fa-edit"></i> Edit
+                        </button>
+                        <button class="delete-btn" onclick="deleteUser(this, 'teacher')">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<footer>
+    <p id="currentTime"></p>
+  </footer>
+<script src="user_management.js"></script>
