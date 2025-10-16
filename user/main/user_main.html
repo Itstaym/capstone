@@ -1,15 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Library Management System - Dashboard</title>
   <link rel="stylesheet" href="user_main.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
+
 <body>
   <header>
     <div class="title-logo">
-      <img src="https://www.paterostechnologicalcollege.edu.ph/ASSETS/IMAGES/LOGO/logo-ptc.png" alt="PTC Logo" class="logo">
+      <img src="https://www.paterostechnologicalcollege.edu.ph/ASSETS/IMAGES/LOGO/logo-ptc.png" alt="PTC Logo"
+        class="logo">
       <h1>PTC Booklink: Library Management System</h1>
     </div>
     <nav>
@@ -22,150 +25,173 @@
       </button>
     </div>
   </header>
- <div class="welcome">
-   <h2>Welcome User</h2>
- </div>
-  
-<div class="parent">
-<div class="notification-list">
-            <h3><i class="fas fa-bell"></i> Notifications</h3>
-            <ul id="notifications">
-              <!-- Example notification, can be dynamically generated -->
-              <li>
-                <i class="fas fa-check-circle" style="color: #4CAF50;"></i>
-                Your book request for <strong>"Introduction to Algorithms"</strong> has been <span style="color: #4CAF50;">approved</span>!
-              </li>
-              <!-- More notifications can be added here -->
-            </ul>
-          </div>
-    <div class="search-container">
-    <input type="text" id="searchInput" placeholder="Search by Title, Author, Publisher" onkeyup="searchBooks()">
-    <i class="fas fa-search search-icon"></i>
+  <div class="welcome">
+    <h2>Welcome User</h2>
   </div>
-  <div class="book-list">
-    <h2>Available Books</h2>
-    <table id="booksTable">
-      <thead>
-        <tr>
-          <th>Book Title</th>
-          <th>Author</th>
-          <th>Publisher</th>
-          <th>Year</th>
-          <th>Status</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- Example book entries -->
-        <tr data-book-id="book1">
-          <td>Introduction to Algorithms</td>
-          <td>Thomas H. Cormen</td>
-          <td>PTC</td>
-          <td>2020</td>
-          <td>Available</td>
-          <td><button class="borrow-btn">Borrow</button></td>
-        </tr>
-        <tr data-book-id="book2">
-          <td>Database Systems Concepts</td>
-          <td>Abraham Silberschatz</td>
-          <td>PTC</td>
-          <td>2024</td>
-          <td>Available</td>
-          <td><button class="borrow-btn">Borrow</button></td>
-        </tr>
-        <tr data-book-id="book3">
-          <td>Introduction to Networking</td>
-          <td>Vico Sotto</td>
-          <td>PTC</td>
-          <td>2021</td>
-          <td>Not Available</td>
-          <td><button class="borrow-btn">Borrow</button></td>
-        </tr>
 
-      </tbody>
-    </table>
-  </div>
-</div>
-    
+  <div class="parent">
+    <div class="notification-list">
+      <h3><i class="fas fa-bell"></i> Notifications</h3>
+      <ul id="notifications">
+        <!-- Example notification, can be dynamically generated -->
+        <li>
+          <i class="fas fa-check-circle" style="color: #4CAF50;"></i>
+          Your book request for <strong>"Introduction to Algorithms"</strong> has been <span
+            style="color: #4CAF50;">approved</span>!
+        </li>
+        <!-- More notifications can be added here -->
+      </ul>
+    </div>
+    <div class="search-container">
+      <input type="text" id="searchInput" placeholder="Search by Title, Author, Publisher or Year" onkeyup="searchBooks()">
+      <i class="fas fa-search search-icon"></i>
+    </div>
+    <div class="book-list">
+      <h2>Available Books</h2>
+      <table id="booksTable">
+        <thead>
+          <tr>
+            <th>Book Title</th>
+            <th>Author</th>
+            <th>Publisher</th>
+            <th>Year</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Example book entries -->
+          <tr data-book-id="book1">
+            <td>Introduction to Algorithms</td>
+            <td>Thomas H. Cormen</td>
+            <td>PTC</td>
+            <td>2020</td>
+            <td>Available</td>
+            <td><button class="borrow-btn">Borrow</button></td>
+          </tr>
+          <tr data-book-id="book2">
+            <td>Database Systems Concepts</td>
+            <td>Abraham Silberschatz</td>
+            <td>PTC</td>
+            <td>2024</td>
+            <td>Available</td>
+            <td><button class="borrow-btn">Borrow</button></td>
+          </tr>
+          <tr data-book-id="book3">
+            <td>Introduction to Networking</td>
+            <td>Vico Sotto</td>
+            <td>PTC</td>
+            <td>2021</td>
+            <td>Not Available</td>
+            <td><button class="borrow-btn">Borrow</button></td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+
   <footer>
     <p id="currentTime"></p>
   </footer>
   <script>
- 
+
     if (!sessionStorage.getItem('isLoggedIn')) {
       alert('Nag-logout ka noh? Login ka ulit!');
-      window.location.href = '../../main_login/main_login.html'; 
+      window.location.href = '../../main_login/main_login.html';
     }
     function logout() {
-    sessionStorage.removeItem('isLoggedIn'); 
-    window.location.href = '../../main_login/main_login.html'; 
-  }
+      sessionStorage.removeItem('isLoggedIn');
+      window.location.href = '../../main_login/main_login.html';
+    }
     function showTime() {
-	document.getElementById('currentTime').innerHTML = new Date().toLocaleString();
-}
-showTime();
-setInterval(function () {
-	showTime();
-}, 1000);
+      document.getElementById('currentTime').innerHTML = new Date().toLocaleString();
+    }
+    showTime();
+    setInterval(function () {
+      showTime();
+    }, 1000);
 
+    function searchBooks() {
+      const input = document.getElementById("searchInput").value.toLowerCase();
+      const table = document.getElementById("booksTable");
+      const rows = table.getElementsByTagName("tr");
+
+      for (let i = 1; i < rows.length; i++) {
+        const cells = rows[i].getElementsByTagName("td");
+        let match = false;
+
+        for (let j = 0; j < cells.length; j++) {
+          if (cells[j]) {
+            const cellText = cells[j].textContent || cells[j].innerText;
+            if (cellText.toLowerCase().indexOf(input) > -1) {
+              match = true;
+              break;
+            }
+          }
+        }
+
+        rows[i].style.display = match ? "" : "none";
+      }
+    }
 
     // Replace the existing DOMContentLoaded event listener with this:
-document.addEventListener('DOMContentLoaded', function() {
-    const rows = document.querySelectorAll('#booksTable tbody tr');
-    
-    rows.forEach(row => {
+    document.addEventListener('DOMContentLoaded', function () {
+      const rows = document.querySelectorAll('#booksTable tbody tr');
+
+      rows.forEach(row => {
         const statusCell = row.querySelector('td:nth-child(5)');
         const buttonCell = row.querySelector('td:last-child');
         const bookTitle = row.querySelector('td:first-child').textContent;
-        
-        if (statusCell.textContent.trim().toLowerCase() === 'not available') {
-            // Replace button with unavailable button
-            buttonCell.innerHTML = '<button class="borrow-btn unavailable" disabled>Not Available</button>';
-        } else {
-            // Add click event for available books
-            const borrowButton = buttonCell.querySelector('.borrow-btn');
-            borrowButton.addEventListener('click', function() {
-                const confirmed = confirm(`Are you sure you want to borrow "${bookTitle}"?`);
-                
-                if (confirmed) {
-                    this.textContent = 'Pending';
-                    this.disabled = true;
-                    this.style.backgroundColor = '#888';
-                    
-                    statusCell.textContent = 'Pending';
-                    statusCell.style.color = '#FFA500';
-                    
-                    addNotification(bookTitle);
-                    
-                    alert(`Request to borrow "${bookTitle}" has been submitted. Please wait for approval.`);
-                }
-            });
-        }
-    });
-});
 
-function updateBookStatus(bookId, status) {
-    const row = document.querySelector(`tr[data-book-id="${bookId}"]`);
-    if (row) {
+        if (statusCell.textContent.trim().toLowerCase() === 'not available') {
+          // Replace button with unavailable button
+          buttonCell.innerHTML = '<button class="borrow-btn unavailable" disabled>Not Available</button>';
+        } else {
+          // Add click event for available books
+          const borrowButton = buttonCell.querySelector('.borrow-btn');
+          borrowButton.addEventListener('click', function () {
+            const confirmed = confirm(`Are you sure you want to borrow "${bookTitle}"?`);
+
+            if (confirmed) {
+              this.textContent = 'Pending';
+              this.disabled = true;
+              this.style.backgroundColor = '#888';
+
+              statusCell.textContent = 'Pending';
+              statusCell.style.color = '#FFA500';
+
+              addNotification(bookTitle);
+
+              alert(`Request to borrow "${bookTitle}" has been submitted. Please wait for approval.`);
+            }
+          });
+        }
+      });
+    });
+
+    function updateBookStatus(bookId, status) {
+      const row = document.querySelector(`tr[data-book-id="${bookId}"]`);
+      if (row) {
         const statusCell = row.querySelector('td:nth-child(5)');
         const borrowButton = row.querySelector('.borrow-btn');
-        
+
         // Update status
         statusCell.textContent = status;
         statusCell.style.color = status === 'Available' ? '#000' : '#FFA500';
-        
+
         // Update button
         if (status === 'Available') {
-            borrowButton.textContent = 'Borrow';
-            borrowButton.disabled = false;
-            borrowButton.style.backgroundColor = '#4CAF50';
-            borrowButton.classList.remove('unavailable');
+          borrowButton.textContent = 'Borrow';
+          borrowButton.disabled = false;
+          borrowButton.style.backgroundColor = '#4CAF50';
+          borrowButton.classList.remove('unavailable');
         }
+      }
     }
-}
 
-// Example usage:
-// updateBookStatus('book1', 'Available'); // Call this when a book is returned
+    // Example usage:
+    // updateBookStatus('book1', 'Available'); // Call this when a book is returned
   </script>
 </body>
+
 </html>

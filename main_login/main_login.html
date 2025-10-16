@@ -26,8 +26,8 @@
   
   <script>
     function showPassword() {
-      const passwordField = document.getElementById('password');
-      const eyeIcon = document.querySelector('.password-wrapper i');
+      let passwordField = document.getElementById('password');
+      let eyeIcon = document.querySelector('.password-wrapper i');
       if (passwordField.type === "password") {
         passwordField.type = "text";
         eyeIcon.classList.remove('fa-eye');
@@ -53,7 +53,7 @@
       else if (name === "librarian" && pw === "password2") {
         role = 'librarian';
       }
-      else if (name === "student" && pw === "password3") {
+      else if (name === "user" && pw === "password3") {
         role = 'user'; 
       }
 

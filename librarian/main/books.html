@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Library Management System - Books</title>
@@ -8,10 +9,12 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
+
 <body>
   <header>
     <div class="title-logo">
-      <img src="https://www.paterostechnologicalcollege.edu.ph/ASSETS/IMAGES/LOGO/logo-ptc.png" alt="PTC Logo" class="logo">
+      <img src="https://www.paterostechnologicalcollege.edu.ph/ASSETS/IMAGES/LOGO/logo-ptc.png" alt="PTC Logo"
+        class="logo">
       <h1>PTC Booklink: Library Management System</h1>
     </div>
     <nav>
@@ -30,17 +33,18 @@
 
   <div class="container">
     <h2>Books Page</h2>
-    
-   
+
+
     <div class="button-container">
       <button id="openModalBtn" onclick="openModal()">Add New Book</button>
       <label for="bulkImportInput" class="bulk-import-label">
         <i class="fas fa-file-import"></i> Bulk Import (.xlsx, .csv)
       </label>
-      <input type="file" id="bulkImportInput" accept=".csv, .xlsx" style="display: none;" onchange="handleBulkImport(event)">
+      <input type="file" id="bulkImportInput" accept=".csv, .xlsx" style="display: none;"
+        onchange="handleBulkImport(event)">
     </div>
-    
-    
+
+
     <div id="addBookModal" class="modal">
       <div class="modal-content">
         <span class="close" onclick="closeModal()">&times;</span>
@@ -51,15 +55,16 @@
           <input type="text" id="modalBookEdition" placeholder="Edition">
           <input type="text" id="modalBookPublisher" placeholder="Publisher">
           <input type="text" id="modalBookYear" placeholder="Year" min="1000" max="2500" required>
-          <button type="submit">Add Book</button>
+          <button type="submit">Save</button>
         </form>
       </div>
     </div>
 
     <div class="search-container">
       <i class="fas fa-search search-icon"></i>
-  <input type="text" id="searchInput" placeholder="Search by Accession Number, Title, Author, Publisher, or Year" onkeyup="searchBooks()">
-</div>
+      <input type="text" id="searchInput" placeholder="Search by Accession Number, Title, Author, Publisher, or Year"
+        onkeyup="searchBooks()">
+    </div>
 
     <h3>Books List</h3>
     <table id="booksTable">
@@ -79,23 +84,46 @@
     <p id="currentTime"></p>
   </footer>
   <script>
-    
+
+    async function getAllBooks() {
+      var data = null
+      const myHeaders = new Headers();
+      myHeaders.append("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QHRlc3QudGVzdCIsImlhdCI6MTc1OTY1NDQ1NywiZXhwIjoxNzU5NjU1MzU3fQ.w1QJWtQiIruO_1mUG9NwBrkcx0gl8x1A17GmnuXl6Gk");
+
+      const requestOptions = {
+        method: "GET",
+        headers: myHeaders,
+        redirect: "follow"
+      };
+
+      await fetch("http://localhost:8080/api/books", requestOptions)
+        .then((response) => response.text())
+        .then((result) => data = JSON.parse(result))
+        .catch((error) => console.error(error));
+
+      data.forEach(element => {
+        addBookToTable(element.title, element.author, element.edition, element.publisher, element.year);  
+      });
+    }
+
+    getAllBooks();
+
     let bookCount = 0;
     let editingRow = null; // Track the row being edited
 
-    
+
     function openModal() {
       document.getElementById("addBookModal").style.display = "block";
     }
 
-    
+
     function closeModal() {
       document.getElementById("addBookModal").style.display = "none";
       editingRow = null; // Reset editing state when modal closes
       document.getElementById("addBookForm").reset();
     }
-   
-    
+
+
     function addBook(event) {
       event.preventDefault();
 
@@ -153,11 +181,11 @@
       bookCount++;
       const formattedBookCount = bookCount.toString().padStart(4, '0');
 
-      
+
       var table = document.getElementById("booksTable");
       var newRow = table.insertRow(-1);
 
-      
+
       var cell0 = newRow.insertCell(0);
       var cell1 = newRow.insertCell(1);
       var cell2 = newRow.insertCell(2);
@@ -167,8 +195,8 @@
       var cell6 = newRow.insertCell(6);
       var cell7 = newRow.insertCell(7); // Action cell
 
-      
-      cell0.innerHTML = formattedBookCount; 
+
+      cell0.innerHTML = formattedBookCount;
       cell1.innerHTML = title;
       cell2.innerHTML = author;
       cell3.innerHTML = edition;
@@ -176,19 +204,19 @@
       cell5.innerHTML = year;
       cell6.innerHTML = ""; // para sa QR 
 
-      
+
       var qrContainer = document.createElement("div");
       qrContainer.style.display = "flex";
       qrContainer.style.flexDirection = "column";
-      qrContainer.style.alignItems = "center"; 
+      qrContainer.style.alignItems = "center";
 
-      
+
       var qrDiv = document.createElement("div");
       qrDiv.style.width = "125px";
       qrDiv.style.height = "125px";
-      qrContainer.appendChild(qrDiv); 
+      qrContainer.appendChild(qrDiv);
 
-      
+
       var qrContent = "Accession Number: " + formattedBookCount + " | Title: " + title + " | Author: " + author + " | Edition: " + edition + " | Publisher: " + publisher + " | Year: " + year;
       new QRCode(qrDiv, {
         text: qrContent,
@@ -199,14 +227,14 @@
         correctLevel: QRCode.CorrectLevel.H
       });
 
-      
+
       var downloadBtn = document.createElement("button");
       downloadBtn.textContent = "Download QR";
       downloadBtn.className = "download-btn";
       downloadBtn.onclick = function () {
         downloadQRCode(qrDiv);
       };
-      qrContainer.appendChild(downloadBtn); 
+      qrContainer.appendChild(downloadBtn);
 
       cell6.appendChild(qrContainer);
 
@@ -245,41 +273,41 @@
     }
 
     function searchBooks() {
-  
-  var input = document.getElementById("searchInput").value.toLowerCase();
-  var table = document.getElementById("booksTable");
-  var rows = table.getElementsByTagName("tr");
+
+      var input = document.getElementById("searchInput").value.toLowerCase();
+      var table = document.getElementById("booksTable");
+      var rows = table.getElementsByTagName("tr");
 
 
-  for (var i = 1; i < rows.length; i++) {
-    var cells = rows[i].getElementsByTagName("td");
-    var match = false;
+      for (var i = 1; i < rows.length; i++) {
+        var cells = rows[i].getElementsByTagName("td");
+        var match = false;
 
-    
-    for (var j = 0; j < cells.length; j++) {
-      if (cells[j]) {
-        var cellText = cells[j].textContent || cells[j].innerText;
-        if (cellText.toLowerCase().indexOf(input) > -1) {
-          match = true;
-          break;
+
+        for (var j = 0; j < cells.length; j++) {
+          if (cells[j]) {
+            var cellText = cells[j].textContent || cells[j].innerText;
+            if (cellText.toLowerCase().indexOf(input) > -1) {
+              match = true;
+              break;
+            }
+          }
         }
+
+
+        rows[i].style.display = match ? "" : "none";
       }
     }
-
-    
-    rows[i].style.display = match ? "" : "none";
-  }
-}
-
+/*
     if (!sessionStorage.getItem('isLoggedIn')) {
       alert('Nag-logout ka noh? Login ka ulit!');
-      window.location.href = '../../main_login/main_login.html'; 
-    }
+      window.location.href = '../../main_login/main_login.html';
+    }*/
     function logout() {
-      sessionStorage.removeItem('isLoggedIn'); 
-      window.location.href = '../../main_login/main_login.html'; 
+      sessionStorage.removeItem('isLoggedIn');
+      window.location.href = '../../main_login/main_login.html';
     }
-    
+
     function showTime() {
       document.getElementById('currentTime').innerHTML = new Date().toLocaleString();
     }
@@ -289,149 +317,211 @@
     }, 1000);
 
     function handleBulkImport(event) {
-    const file = event.target.files[0];
-    if (!file) return;
+      const file = event.target.files[0];
+      if (!file) return;
 
-    const reader = new FileReader();
-    reader.onload = function (e) {
-      const data = e.target.result;
-      const workbook = XLSX.read(data, { type: "binary" });
-      const sheetName = workbook.SheetNames[0];
-      const sheet = workbook.Sheets[sheetName];
-      const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        const data = e.target.result;
+        const workbook = XLSX.read(data, { type: "binary" });
+        const sheetName = workbook.SheetNames[0];
+        const sheet = workbook.Sheets[sheetName];
+        const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 });
 
-      // Skip the header row and process the data
-      for (let i = 1; i < rows.length; i++) {
-        const row = rows[i];
-        if (!row[0] && !row[1]) continue; // Skip empty rows
+        // Skip the header row and process the data
+        for (let i = 1; i < rows.length; i++) {
+          const row = rows[i];
+          if (!row[0] && !row[1]) continue; // Skip empty rows
 
-        // Map columns: [Title, Author, Edition, Publisher, Year]
-        const title = row[0] || "";
-        const author = row[1] || "";
-        const edition = row[2] || "";
-        const publisher = row[3] || "";
-        const year = row[4] || "";
+          // Map columns: [Title, Author, Edition, Publisher, Year]
+          const title = row[0] || "";
+          const author = row[1] || "";
+          const edition = row[2] || "";
+          const publisher = row[3] || "";
+          const year = row[4] || "";
 
-        // Validate year
-        if (year < 1000 || year > 2500 || isNaN(year)) continue;
+          // Validate year
+          if (year < 1000 || year > 2500 || isNaN(year)) continue;
 
-        // Add the book to the table
-        addBookToTable(title, author, edition, publisher, year);
-      }
-      alert("Bulk import completed!");
-    };
+          // Add the book to the table
+          addBookToTable(title, author, edition, publisher, year);
+        }
+        alert("Bulk import completed!");
+      };
 
-    reader.readAsBinaryString(file);
-  }
+      reader.readAsBinaryString(file);
+    }
 
-  function addBookToTable(title, author, edition, publisher, year) {
-    bookCount++;
-    const formattedBookCount = bookCount.toString().padStart(4, "0");
+    function addBookToTable(title, author, edition, publisher, year) {
+      bookCount++;
+      const formattedBookCount = bookCount.toString().padStart(4, "0");
 
-    const table = document.getElementById("booksTable");
-    const newRow = table.insertRow(-1);
+      const table = document.getElementById("booksTable");
+      const newRow = table.insertRow(-1);
 
-    const cell0 = newRow.insertCell(0);
-    const cell1 = newRow.insertCell(1);
-    const cell2 = newRow.insertCell(2);
-    const cell3 = newRow.insertCell(3);
-    const cell4 = newRow.insertCell(4);
-    const cell5 = newRow.insertCell(5);
-    const cell6 = newRow.insertCell(6);
-    const cell7 = newRow.insertCell(7); // Action cell
+      const cell0 = newRow.insertCell(0);
+      const cell1 = newRow.insertCell(1);
+      const cell2 = newRow.insertCell(2);
+      const cell3 = newRow.insertCell(3);
+      const cell4 = newRow.insertCell(4);
+      const cell5 = newRow.insertCell(5);
+      const cell6 = newRow.insertCell(6);
+      const cell7 = newRow.insertCell(7); // Action cell
 
-    cell0.innerHTML = formattedBookCount;
-    cell1.innerHTML = title;
-    cell2.innerHTML = author;
-    cell3.innerHTML = edition;
-    cell4.innerHTML = publisher;
-    cell5.innerHTML = year;
+      cell0.innerHTML = formattedBookCount;
+      cell1.innerHTML = title;
+      cell2.innerHTML = author;
+      cell3.innerHTML = edition;
+      cell4.innerHTML = publisher;
+      cell5.innerHTML = year;
 
-    const qrContainer = document.createElement("div");
-    qrContainer.style.display = "flex";
-    qrContainer.style.flexDirection = "column";
-    qrContainer.style.alignItems = "center";
+      const qrContainer = document.createElement("div");
+      qrContainer.style.display = "flex";
+      qrContainer.style.flexDirection = "column";
+      qrContainer.style.alignItems = "center";
 
-    const qrDiv = document.createElement("div");
-    qrDiv.style.width = "125px";
-    qrDiv.style.height = "125px";
-    qrContainer.appendChild(qrDiv);
+      const qrDiv = document.createElement("div");
+      qrDiv.style.width = "125px";
+      qrDiv.style.height = "125px";
+      qrContainer.appendChild(qrDiv);
 
-    const qrContent = `Accession Number: ${formattedBookCount} | Title: ${title} | Author: ${author} | Edition: ${edition} | Publisher: ${publisher} | Year: ${year}`;
-    new QRCode(qrDiv, {
-      text: qrContent,
-      width: 110,
-      height: 110,
-      colorDark: "#000000",
-      colorLight: "#ffffff",
-      correctLevel: QRCode.CorrectLevel.H,
-    });
+      const qrContent = `Accession Number: ${formattedBookCount} | Title: ${title} | Author: ${author} | Edition: ${edition} | Publisher: ${publisher} | Year: ${year}`;
+      new QRCode(qrDiv, {
+        text: qrContent,
+        width: 110,
+        height: 110,
+        colorDark: "#000000",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.H,
+      });
 
-    const downloadBtn = document.createElement("button");
-    downloadBtn.textContent = "Download QR";
-    downloadBtn.className = "download-btn";
-    downloadBtn.onclick = function () {
-      downloadQRCode(qrDiv);
-    };
-    qrContainer.appendChild(downloadBtn);
+      const downloadBtn = document.createElement("button");
+      downloadBtn.textContent = "Download QR";
+      downloadBtn.className = "download-btn";
+      downloadBtn.onclick = function () {
+        downloadQRCode(qrDiv);
+      };
+      qrContainer.appendChild(downloadBtn);
 
-    cell6.appendChild(qrContainer);
+      cell6.appendChild(qrContainer);
 
-    // Add Edit and Delete buttons
-    cell7.innerHTML = `
+      // Add Edit and Delete buttons
+      cell7.innerHTML = `
       <button class="edit-btn" onclick="editRow(this)">Edit</button>
       <button class="delete-btn" onclick="deleteRow(this)">Delete</button>
     `;
-  }
-
-  function downloadQRCode(qrDiv) {
-    const canvas = qrDiv.querySelector("canvas");
-    if (canvas) {
-      const imageSrc = canvas.toDataURL("image/png");
-      const a = document.createElement("a");
-      a.href = imageSrc;
-      a.download = "qrcode.png";
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    } else {
-      alert("QR code not available for download.");
     }
-  }
 
-  // Delete row function
-function deleteRow(btn) {
-  if (confirm("Are you sure you want to delete this book?")) {
-    const row = btn.closest("tr");
-    row.remove();
-  }
+    function downloadQRCode(qrDiv) {
+      const canvas = qrDiv.querySelector("canvas");
+      if (canvas) {
+        const imageSrc = canvas.toDataURL("image/png");
+        const a = document.createElement("a");
+        a.href = imageSrc;
+        a.download = "qrcode.png";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      } else {
+        alert("QR code not available for download.");
+      }
+    }
+
+    // Delete row function
+    function deleteRow(btn) {
+      if (confirm("Are you sure you want to delete this book?")) {
+        const table = document.getElementById("booksTable");
+        const row = btn.closest("tr");
+        const deletedIndex = row.rowIndex;
+        
+        // Delete the row
+        row.remove();
+        
+        // Update accession numbers for all rows after the deleted row
+        const rows = table.getElementsByTagName("tr");
+        for (let i = deletedIndex; i < rows.length; i++) {
+            // Skip header row
+            if (i === 0) continue;
+            
+            // Format new accession number
+            const newAccessionNum = i.toString().padStart(4, '0');
+            
+            // Update accession number in the first cell
+            rows[i].cells[0].innerHTML = newAccessionNum;
+            
+            // Update QR code content with new accession number
+            const title = rows[i].cells[1].innerText;
+            const author = rows[i].cells[2].innerText;
+            const edition = rows[i].cells[3].innerText;
+            const publisher = rows[i].cells[4].innerText;
+            const year = rows[i].cells[5].innerText;
+            
+            // Create new QR code with updated accession number
+            const qrContainer = rows[i].cells[6];
+            qrContainer.innerHTML = "";
+            
+            const qrDiv = document.createElement("div");
+            qrDiv.style.width = "125px";
+            qrDiv.style.height = "125px";
+            qrContainer.appendChild(qrDiv);
+            
+            const qrContent = `Accession Number: ${newAccessionNum} | Title: ${title} | Author: ${author} | Edition: ${edition} | Publisher: ${publisher} | Year: ${year}`;
+            new QRCode(qrDiv, {
+                text: qrContent,
+                width: 110,
+                height: 110,
+                colorDark: "#000000",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+            
+            // Add download button
+            const downloadBtn = document.createElement("button");
+            downloadBtn.textContent = "Download QR";
+            downloadBtn.className = "download-btn";
+            downloadBtn.onclick = function() {
+                downloadQRCode(qrDiv);
+            };
+            qrContainer.appendChild(downloadBtn);
+        }
+        
+        // Update bookCount
+        bookCount--;
+    }
 }
+    login();
   </script>
 </body>
+
 </html>
 <style>
-/* Add styles for edit/delete buttons */
-.edit-btn, .delete-btn {
-  padding: 6px 12px;
-  margin: 2px;
-  border: none;
-  border-radius: 4px;
-  font-size: 13px;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-.edit-btn {
-  background: #337ab7;
-  color: #fff;
-}
-.edit-btn:hover {
-  background: #23527c;
-}
-.delete-btn {
-  background: #e74c3c;
-  color: #fff;
-}
-.delete-btn:hover {
-  background: #c0392b;
-}
+  /* Add styles for edit/delete buttons */
+  .edit-btn,
+  .delete-btn {
+    padding: 6px 12px;
+    margin: 2px;
+    border: none;
+    border-radius: 4px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .edit-btn {
+    background: #337ab7;
+    color: #fff;
+  }
+
+  .edit-btn:hover {
+    background: #23527c;
+  }
+
+  .delete-btn {
+    background: #e74c3c;
+    color: #fff;
+  }
+
+  .delete-btn:hover {
+    background: #c0392b;
+  }
 </style>
