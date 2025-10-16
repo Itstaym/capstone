@@ -31,12 +31,20 @@
 <div class="section">
   <h2>Borrow Book</h2>
   <form onsubmit="return issueBook(event);">
-    <button type="button" id="scanIssueMemberBtn" onclick="openQrScanner('issueMember')">Scan Member QR</button>
-    <input type="hidden" id="issueMember" required>
-    <button type="button" id="scanIssueBookBtn" onclick="openQrScanner('issueBookTitle')">Scan Book QR</button>
-    <input type="hidden" id="issueBookTitle" required>
-    <p>Borrow Date</p>
-    <input type="date" id="issueDate" placeholder="Issue Date" required>
+    <div class="form-group">
+      <label for="requestSelect">Select Approved Request:</label>
+      <select id="requestSelect" required>
+        <option value="">Select a request...</option>
+        <!-- Will be populated dynamically -->
+      </select>
+    </div>
+    <button type="button" id="scanIssueBookBtn" onclick="openQrScanner('issueBookTitle')">
+      Scan Book Barcode, QR, NFC
+    </button>
+    <div id="scanStatus" class="scan-status"></div>
+    <div id="scanTimestamp" class="scan-timestamp"></div>
+    <input type="hidden" id="issueBookTitle">
+    <input type="hidden" id="borrowDateTime">
     <p>Due Date</p>
     <input type="date" id="dueDate" placeholder="Due Date" required>
     <button type="submit">Borrow</button>
@@ -47,60 +55,101 @@
 <div class="section">
   <h2>Return Book</h2>
   <form onsubmit="return returnBook(event);">
-    <button type="button" id="scanReturnMemberBtn" onclick="openQrScanner('returnMember')">Scan Member QR</button>
-    <input type="hidden" id="returnMember" required>
-    <button type="button" id="scanReturnBookBtn" onclick="openQrScanner('returnBookTitle')">Scan Book QR</button>
-    <input type="hidden" id="returnBookTitle" required>
-    <p>Return Date</p>
-    <input type="date" id="returnDate" placeholder="Return Date" required>
-    <button type="submit">Return Book</button>
+    <button type="button" id="scanReturnBookBtn" onclick="openQrScanner('returnBookTitle')">
+      Scan Book Barcode, QR or NFC
+    </button>
+    <div id="returnScanStatus" class="scan-status"></div>
+    <div id="returnScanTimestamp" class="scan-timestamp"></div>
+    <input type="hidden" id="returnBookTitle">
+    <input type="hidden" id="returnDateTime">
+    <button type="submit">Return</button>
   </form>
 </div>
 
 <div id="qrScannerModal" style="display: none;">
   <div id="reader" style="width: 300px; height: 300px; margin: auto;"></div>
-  <button onclick="closeQrScanner()">Close</button>
+  <button onclick="closeQrScanner()">Cancel</button>
 </div>
   </div>
   <footer>
     <p id="currentTime"></p>
   </footer>
   <script>
+    let approvedRequests = []; // Will store approved requests from database
 
-function openQrScanner(inputId) {
-  currentInputId = inputId;
-  document.getElementById("qrScannerModal").style.display = "block";
-
-  const html5QrCode = new Html5Qrcode("reader");
-  html5QrCode.start(
-    { facingMode: "environment" }, 
-    {
-      fps: 10, 
-      qrbox: { width: 250, height: 250 }, 
-    },
-    (decodedText) => {
-      
-      document.getElementById(currentInputId).value = decodedText;
-      alert(`Scanned: ${decodedText}`);
-      html5QrCode.stop(); 
-      closeQrScanner();
-    },
-    (errorMessage) => {
-      
-      console.error(`QR Code scan error: ${errorMessage}`);
-    }
-  ).catch((err) => {
-    console.error(`Unable to start scanning: ${err}`);
-  });
+// Simulate fetching approved requests (replace with actual API call)
+function fetchApprovedRequests() {
+    // Dummy data - replace with actual API call
+    approvedRequests = [
+        { id: 1, studentName: 'Juan Dela Cruz', bookTitle: 'Introduction to Programming' },
+        { id: 2, studentName: 'Maria Santos', bookTitle: 'Database Management' }
+    ];
+    populateRequestDropdown();
 }
 
-function closeQrScanner() {
-  document.getElementById("qrScannerModal").style.display = "none";
-  const reader = document.getElementById("reader");
-  if (reader) {
-    reader.innerHTML = ""; 
+function populateRequestDropdown() {
+    const select = document.getElementById('requestSelect');
+    select.innerHTML = '<option value="">Select a request...</option>';
+    
+    approvedRequests.forEach(request => {
+        const option = document.createElement('option');
+        option.value = request.id;
+        option.textContent = `${request.studentName} - ${request.bookTitle}`;
+        select.appendChild(option);
+    });
+}
+
+    function openQrScanner(inputId) {
+      currentInputId = inputId;
+      document.getElementById("qrScannerModal").style.display = "block";
+
+      const reader = document.getElementById("reader");
+      reader.innerHTML = "<div class='scan-message'>Please Scan the Book</div>";
+
+      setTimeout(() => {
+        const success = Math.random() > 0.3;
+        const isBorrow = inputId === 'issueBookTitle';
+        const statusId = isBorrow ? 'scanStatus' : 'returnScanStatus';
+        const timestampId = isBorrow ? 'scanTimestamp' : 'returnScanTimestamp';
+        const dateTimeId = isBorrow ? 'borrowDateTime' : 'returnDateTime';
+
+        if (success) {
+          const sampleBookId = "BOOK-" + Math.floor(Math.random() * 1000);
+          document.getElementById(currentInputId).value = sampleBookId;
+          
+          // Get current date and time
+          const now = new Date();
+          document.getElementById(dateTimeId).value = now.toISOString();
+          
+          // Update scan status and timestamp
+          document.getElementById(statusId).innerHTML = "Scan Successfully";
+          document.getElementById(timestampId).innerHTML = now.toLocaleString();
+          
+          reader.innerHTML = "<div class='scan-message success'>Scan Successful</div>";
+          setTimeout(() => {
+            closeQrScanner();
+          }, 1500);
+        } else {
+          reader.innerHTML = "<div class='scan-message error'>Scan Failed. Please try again.</div>";
+          
+          // Clear scan status and timestamp if failed
+          document.getElementById(statusId).innerHTML = "";
+          document.getElementById(timestampId).innerHTML = "";
+          
+          setTimeout(() => {
+            reader.innerHTML = "<div class='scan-message'>Please scan the Book</div>";
+          }, 3000);
+        }
+    }, 3000);
   }
-}
+
+    function closeQrScanner() {
+      document.getElementById("qrScannerModal").style.display = "none";
+      const reader = document.getElementById("reader");
+      if (reader) {
+        reader.innerHTML = ""; 
+      }
+    }
 
     if (!sessionStorage.getItem('isLoggedIn')) {
       alert('Nag-logout ka noh? Login ka ulit!');
@@ -117,6 +166,9 @@ function closeQrScanner() {
     }
     showTime();
     setInterval(showTime, 1000);
+
+    // Call this when the page loads
+document.addEventListener('DOMContentLoaded', fetchApprovedRequests);
   </script>
 </body>
 </html>
