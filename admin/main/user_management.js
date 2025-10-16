@@ -33,8 +33,57 @@ document.getElementById('searchUsers').addEventListener('input', function(e) {
     });
 });
 
-function showTime() {
-            document.getElementById('currentTime').innerHTML = new Date().toLocaleString();
+// Modal
+const modal = document.getElementById("editModal");
+const span = document.getElementsByClassName("close")[0];
+const editForm = document.getElementById("editUser");
+
+function editUser(button, userType) {
+    const row = button.closest('tr');
+    const fullName = row.cells[0].textContent;
+    const email = row.cells[1].textContent;
+
+    document.getElementById('editFullName').value = fullName;
+    document.getElementById('editEmail').value = email;
+
+    editForm.dataset.editingRow = row.rowIndex;
+    editForm.dataset.userType = userType;
+
+    modal.style.display = "block";
+}
+
+// close modal
+function closeModal() {
+    modal.style.display = "none";
+}
+
+closeBtn.onlick = closeModal;
+window.onclick = function(event) {
+    if (event.target === modal) {
+        closeModal();
+    }
+}
+
+document.querySelector('.btn-save').onclick = function() {
+    let fullName = document.getElementById('editFullName').value;
+    let email = document.getElementById('editEmail').value;
+
+    if(email.endsWith('@paterostechnologicalcollege.edu.ph')) {
+        alert("Email must be a valid PTC email address.");
+        return;
+    }
+
+
+}
+function logout() {
+            sessionStorage.removeItem('isLoggedIn');
+            window.location.href = '../../main_login/main_login.html';
         }
-        showTime();
-        setInterval(showTime, 1000);
+
+function showTime() {
+      document.getElementById('currentTime').innerHTML = new Date().toLocaleString();
+    }
+    showTime();
+    setInterval(function () {
+      showTime();
+    }, 1000);

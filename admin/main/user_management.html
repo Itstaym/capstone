@@ -1,15 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Admin - User Management</title>
     <link rel="stylesheet" href="user_management.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
+
 <body>
     <header>
         <div class="title-logo">
-            <img src="https://www.paterostechnologicalcollege.edu.ph/ASSETS/IMAGES/LOGO/logo-ptc.png" alt="PTC Logo" class="logo">
+            <img src="https://www.paterostechnologicalcollege.edu.ph/ASSETS/IMAGES/LOGO/logo-ptc.png" alt="PTC Logo"
+                class="logo">
             <h1>Admin</h1>
         </div>
         <nav>
@@ -23,70 +26,93 @@
             </button>
         </div>
     </header>
-        <div class="users-container">
-    <!-- Search Bar -->
-    <div class="search-container">
-        <i class="fas fa-search"></i>
-        <input type="text" id="searchUsers" placeholder="Search users...">
-    </div>
+    <div class="users-container">
+        <!-- Search Bar -->
+        <div class="search-container">
+            <i class="fas fa-search"></i>
+            <input type="text" id="searchUsers" placeholder="Search users...">
+        </div>
 
-    <!-- Students Table -->
-    <div class="table-section">
-        <h2><i class="fas fa-user-graduate"></i> Students</h2>
-        <table id="studentsTable" class="users-table">
-            <thead>
-                <tr>
-                    <th>Full Name</th>
-                    <th>Email</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Juan Dela Cruz</td>
-                    <td>juan.delacruz@paterostechnologicalcollege.edu.ph</td>
-                    <td class="action-buttons">
-                        <button class="edit-btn" onclick="editUser(this, 'student')">
-                            <i class="fas fa-edit"></i> Edit
-                        </button>
-                        <button class="delete-btn" onclick="deleteUser(this, 'student')">
-                            <i class="fas fa-trash"></i> Delete
-                        </button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+        <!-- Students Table -->
+        <div class="table-section">
+            <h2><i class="fas fa-user-graduate"></i> Students</h2>
+            <table id="studentsTable" class="users-table">
+                <thead>
+                    <tr>
+                        <th>Full Name</th>
+                        <th>Email</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Juan Dela Cruz</td>
+                        <td>juan.delacruz@paterostechnologicalcollege.edu.ph</td>
+                        <td class="action-buttons">
+                            <button class="edit-btn" onclick="editUser(this, 'student')">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                            <button class="delete-btn" onclick="deleteUser(this, 'student')">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
-    <!-- Teachers Table -->
-    <div class="table-section">
-        <h2><i class="fas fa-chalkboard-teacher"></i> Teachers</h2>
-        <table id="teachersTable" class="users-table">
-            <thead>
-                <tr>
-                    <th>Full Name</th>
-                    <th>Email</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Maria Santos</td>
-                    <td>maria.santos@paterostechnologicalcollege.edu.ph</td>
-                    <td class="action-buttons">
-                        <button class="edit-btn" onclick="editUser(this, 'teacher')">
-                            <i class="fas fa-edit"></i> Edit
-                        </button>
-                        <button class="delete-btn" onclick="deleteUser(this, 'teacher')">
-                            <i class="fas fa-trash"></i> Delete
-                        </button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <!-- Teachers Table -->
+        <div class="table-section">
+            <h2><i class="fas fa-chalkboard-teacher"></i> Teachers</h2>
+            <table id="teachersTable" class="users-table">
+                <thead>
+                    <tr>
+                        <th>Full Name</th>
+                        <th>Email</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Maria Santos</td>
+                        <td>maria.santos@paterostechnologicalcollege.edu.ph</td>
+                        <td class="action-buttons">
+                            <button class="edit-btn" onclick="editUser(this, 'teacher')">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                            <button class="delete-btn" onclick="deleteUser(this, 'teacher')">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
-</div>
-<footer>
-    <p id="currentTime"></p>
-  </footer>
-<script src="user_management.js"></script>
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Edit User</h2>
+            <form id="editUser">
+                <div class="form-group">
+                    <label for="editFullName">Full Name</label>
+                    <input type="text" id="editFullName" required>
+                </div>
+                <div class="form-group">
+                    <label for="editEmail">Email</label>
+                    <input type="email" id="editEmail" pattern=".+@paterostechnologicalcollege\.edu\.ph$" required>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-cancel">Cancel</button>
+                    <button type="button" class="btn-save">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <footer>
+        <p id="currentTime"></p>
+    </footer>
+    <script src="user_management.js"></script>
+</body>
+
+</html>
