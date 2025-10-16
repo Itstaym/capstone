@@ -266,3 +266,33 @@ body {
 .bulk-import-label i {
   margin-right: 5px;
 }
+
+/* Add styles for edit/delete buttons */
+  .edit-btn,
+  .delete-btn {
+    padding: 6px 12px;
+    margin: 2px;
+    border: none;
+    border-radius: 4px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .edit-btn {
+    background: #337ab7;
+    color: #fff;
+  }
+
+  .edit-btn:hover {
+    background: #23527c;
+  }
+
+  .delete-btn {
+    background: #e74c3c;
+    color: #fff;
+  }
+
+  .delete-btn:hover {
+    background: #c0392b;
+  }
